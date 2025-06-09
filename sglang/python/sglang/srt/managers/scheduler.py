@@ -1261,9 +1261,9 @@ class Scheduler(
                 f"available_size={len(self.req_to_token_pool.free_slots)}, "
                 f"total_size={self.req_to_token_pool.size}\n"
             )
-            warnings.warn(msg)
-            if crash_on_warnings():
-                raise ValueError(msg)
+            # warnings.warn(msg)
+            # if crash_on_warnings():
+            #     raise ValueError(msg)
 
         if (
             self.enable_metrics
@@ -1341,8 +1341,6 @@ class Scheduler(
                         self.zombie_batch = self.running_batch
                         self.running_batch = ScheduleBatch(reqs=[], batch_is_full=False)
                         ret = split_batch
-                        if self.attn_tp_rank == 0:
-                            self.check_memory()
                 elif self.running_batch.is_merge and not self.running_batch.is_zombie: # Merge
                     zombie_group = self.running_batch.zombie_group
                     self.running_batch.zombie_group = []
@@ -1351,8 +1349,6 @@ class Scheduler(
                     merge_batch = self.merge_zombie_batch_to_run(zombie_group)
                     self.running_batch = ScheduleBatch(reqs=[], batch_is_full=False)
                     ret = merge_batch
-                    if self.attn_tp_rank == 0:
-                        self.check_memory()
                 elif self.running_batch.is_zombie and self.running_batch.is_merge: # Split and Merge
                     assert len(self.running_batch.pending_reqs) > 0
                     for req in self.running_batch.pending_reqs:
@@ -1367,8 +1363,6 @@ class Scheduler(
                     split_merge_batch = self.split_merge_zombie_batch_to_run(zombie_group)
                     self.running_batch = ScheduleBatch(reqs=[], batch_is_full=False)
                     ret = split_merge_batch
-                    if self.attn_tp_rank == 0:
-                        self.check_memory()
                 else:
                     ret = self.running_batch if not self.running_batch.is_empty() else None
             else:
@@ -1393,8 +1387,6 @@ class Scheduler(
                                 merge_batch = self.merge_zombie_batch_to_run(zombie_group)
                                 self.running_batch = ScheduleBatch(reqs=[], batch_is_full=False)
                                 ret = merge_batch
-                                if self.attn_tp_rank == 0:
-                                    self.check_memory()
                             else:
                                 ret = None
                                 self.running_batch = ScheduleBatch(reqs=[], batch_is_full=False)
