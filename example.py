@@ -22,10 +22,9 @@ def main(args):
     for p in os.listdir(prompts_path):
         with open(os.path.join(prompts_path, p), "r") as f:
             prompts.append(f.read())
-    def construct_prompt(p):
+    def construct_prompt(user_query):
         system_prompt = "You are Qwen, created by Alibaba Cloud. You are a helpful assistant."
-        user_query = p + '\n'
-        formatted_prompt = f"<|im_start|>system\n{system_prompt}<|im_end|>\n<|im_start|>user\n{user_query}<|im_end|>\n<|im_start|>assistant\n"
+        formatted_prompt = f"<|im_start|>system\n{system_prompt}<|im_end|>\n<|im_start|>user\n{user_query}\n<|im_end|>\n<|im_start|>assistant\n"
         return formatted_prompt
     prompts = [construct_prompt(p) for p in prompts]
     
@@ -50,6 +49,6 @@ def main(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--model_path", type=str, default=None, help="Path to the Multiverse model")
-    parser.add_argument("--prompts_path", type=str, default=None, help="Path to the prompts")
+    parser.add_argument("--prompts_path", type=str, default=None, help="Path to the prompt list")
     args = parser.parse_args()
     main(args)
