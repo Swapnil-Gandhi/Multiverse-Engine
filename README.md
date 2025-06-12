@@ -10,7 +10,7 @@ This repository contains the official implementation of **Multiverse Engine**,  
 
 ## 🚀 Installation
 
-To set up the environment, create a new conda environment and then run the provided installation script.
+To set up the environment, create a new conda environment and then run the following installation script.
 
 ```bash
 conda create -n multiverse python=3.11
@@ -24,7 +24,7 @@ bash install.sh
 
 ## ✨ Quick Start
 
-The usage of Multiverse Engine is the same as the standard SGLang workflow. See `example.py` for a simple use case.
+The usage of Multiverse Engine is identical to the standard SGLang workflow. See `example.py` for a simple demonstration.
 
 The script accepts the following arguments:
 * `--model_path`: The path to the base model on your local machine or from the Hugging Face Hub.
