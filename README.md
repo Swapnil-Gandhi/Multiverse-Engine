@@ -2,7 +2,7 @@
 <h1><img src="assets/multiverse-logo.png" height="40px" align="top"/> Multiverse Engine
 </h1>
 
-This repository contains the official implementation of **Multiverse Engine**,  which is built up from the [SGLang](https://github.com/sgl-project/sglang) codebase to support parallel inference for **Multiverse Models**. For more details about Multiverse, please refer to our research paper: 
+This repository contains the official implementation of **Multiverse Engine**,  which is built up from the [SGLang](https://github.com/sgl-project/sglang) codebase to support inference for **Multiverse Models**. For more details about Multiverse, please refer to our research paper: 
 >[**Multiverse: Your Language Models Secretly Decide How to Parallelize and Merge Generation**](https://arxiv.org/abs/2506.09991)
 
 
