@@ -24,7 +24,7 @@ bash install.sh
 
 ## ✨ Quick Start
 
-The usage of Multiverse Engine is identical to the standard SGLang workflow. See `example.py` for a simple demonstration.
+The usage of Multiverse Engine is identical to the SGLang workflow. See `example.py` for a simple demonstration.
 
 The script accepts the following arguments:
 * `--model_path`: The path to the base model on your local machine or from the Hugging Face Hub.
