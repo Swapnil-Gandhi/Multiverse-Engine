@@ -34,8 +34,8 @@ To run the quick start example:
 
 ```bash
 python example.py \
-  --model_path  \
-  --prompts_dir 
+  --model_path Multiverse4FM/Multiverse-32B \
+  --prompts_dir ./prompt
 ```
 
 This will load the model and generate responses for each prompt in the specified text file, leveraging the Multiverse capabilities defined for the model.
