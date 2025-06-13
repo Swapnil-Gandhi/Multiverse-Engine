@@ -40,6 +40,17 @@ python example.py \
 
 This will load the model and generate responses for each prompt in the specified text file, leveraging the Multiverse capabilities defined for the model.
 
+
+
+## ⚠️ Known Issues
+
+We are actively working on addressing the following known issues and areas for improvement:
+
+* [ ]  **KV Cache Eviction Enhancement:**: The eviction feature for KV cache management should be further improved to handle huge batch size requests more robustly and efficiently.
+* [ ]  **Excessive Model Splitting**: We are working to prevent crashes that may occur when the Multiverse model is split into an excessive number of partitions.
+
+If you encounter any other failure cases or unexpected behavior not listed above, please don't hesitate to open an issue on GitHub and provide us with the details.
+
 ## 📚 References
 
 The Multiverse Engine is built upon and extends the functionalities of the SGLang codebase. This project was developed based on **SGLang commit 357fb2d**.
