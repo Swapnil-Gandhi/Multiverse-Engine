@@ -35,7 +35,25 @@ To run the quick start example:
 ```bash
 python example.py \
   --model_path  \
-  --prompts_path 
+  --prompts_dir 
 ```
 
 This will load the model and generate responses for each prompt in the specified text file, leveraging the Multiverse capabilities defined for the model.
+
+## 📚 References
+
+The Multiverse Engine is built upon and extends the functionalities of the SGLang codebase. This project was developed based on **SGLang commit 357fb2d**.
+
+For more details on SGLang, please refer to their research paper:
+
+```bibtex
+@misc{zheng2024sglangefficientexecutionstructured,
+      title={SGLang: Efficient Execution of Structured Language Model Programs}, 
+      author={Lianmin Zheng and Liangsheng Yin and Zhiqiang Xie and Chuyue Sun and Jeff Huang and Cody Hao Yu and Shiyi Cao and Christos Kozyrakis and Ion Stoica and Joseph E. Gonzalez and Clark Barrett and Ying Sheng},
+      year={2024},
+      eprint={2312.07104},
+      archivePrefix={arXiv},
+      primaryClass={cs.AI},
+      url={[https://arxiv.org/abs/2312.07104](https://arxiv.org/abs/2312.07104)}, 
+}
+```

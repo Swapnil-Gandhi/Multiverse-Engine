@@ -49,6 +49,6 @@ def main(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--model_path", type=str, default=None, help="Path to the Multiverse model")
-    parser.add_argument("--prompts_path", type=str, default=None, help="Path to the prompt list")
+    parser.add_argument("--prompts_dir", type=str, default=None, help="Path to the prompt directory")
     args = parser.parse_args()
     main(args)
