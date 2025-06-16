@@ -2,7 +2,7 @@
 <h1><img src="assets/multiverse-logo.png" height="40px" align="top"/> Multiverse Engine
 </h1>
 
-This repository contains the official implementation of **Multiverse Engine**,  which is built up from the [SGLang](https://github.com/sgl-project/sglang) codebase to support inference for **Multiverse Models**. For more details, please refer to our research paper: 
+This repository contains the official implementation of **Multiverse Engine**,  which is built up from the [SGLang](https://github.com/sgl-project/sglang/tree/357fb2dba5543a3b40607ac43acc2582331b930c) codebase to support inference for **Multiverse Models**. For more details, please refer to our research paper: 
 >[**Multiverse: Your Language Models Secretly Decide How to Parallelize and Merge Generation**](https://arxiv.org/abs/2506.09991)
 
 
@@ -46,25 +46,27 @@ This will load the model and generate responses for each prompt in the specified
 
 We are actively working on addressing the following known issues and areas for improvement:
 
-* [ ]  **KV Cache Eviction Enhancement:**: The eviction feature for KV cache management should be further improved to handle huge batch size requests more robustly and efficiently.
-* [ ]  **Excessive Model Splitting**: We are working to prevent crashes that may occur when the Multiverse model is split into an excessive number of partitions.
+* [ ]  **Support KV Cache Eviction :**: Currently, KV cache offloading and reloading mechanisms are not supported. To ensure correctness, we recommend limiting the batch size to 50 or fewer.
+* [ ]  **Avoid Infinite Parallelism**: We are working on implementing safeguards against infinite-depth parallelism that may be introduced by the model itself.
 
-If you encounter any other failure cases or unexpected behavior not listed above, please don't hesitate to open an issue on GitHub and provide us with the details.
+To avoid potential issues during usage, we recommend setting a maximum timeout in your code to prevent infinite loops or extremely long generation times.
+
+## 📧 Contact
+
+For any questions, bug reports, or feature requests, please open an issue on our [GitHub repository](https://github.com/Multiverse4FM/Multiverse-Engine/issues) or send an email to multiversefoundationmodel@gmail.com.
 
 ## 📚 References
 
-The Multiverse Engine is built upon and extends the functionalities of the SGLang codebase. This project was developed based on **SGLang commit 357fb2d**.
-
-For more details on SGLang, please refer to their research paper:
+Thank you for your interest in Multiverse Engine! We hope this tool will be helpful for your research and development. If you find it useful, please consider citing our work. Happy coding! 🚀
 
 ```bibtex
-@misc{zheng2024sglangefficientexecutionstructured,
-      title={SGLang: Efficient Execution of Structured Language Model Programs}, 
-      author={Lianmin Zheng and Liangsheng Yin and Zhiqiang Xie and Chuyue Sun and Jeff Huang and Cody Hao Yu and Shiyi Cao and Christos Kozyrakis and Ion Stoica and Joseph E. Gonzalez and Clark Barrett and Ying Sheng},
-      year={2024},
-      eprint={2312.07104},
+@misc{yang2025multiverselanguagemodelssecretly,
+      title={Multiverse: Your Language Models Secretly Decide How to Parallelize and Merge Generation}, 
+      author={Xinyu Yang and Yuwei An and Hongyi Liu and Tianqi Chen and Beidi Chen},
+      year={2025},
+      eprint={2506.09991},
       archivePrefix={arXiv},
-      primaryClass={cs.AI},
-      url={[https://arxiv.org/abs/2312.07104](https://arxiv.org/abs/2312.07104)}, 
+      primaryClass={cs.LG},
+      url={https://arxiv.org/abs/2506.09991}, 
 }
 ```
