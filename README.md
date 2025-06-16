@@ -42,7 +42,7 @@ This will load the model and generate responses for each prompt in the specified
 
 
 
-## 🚧 Potential Issues
+## 🚧 Issues
 
 We are actively working on addressing the following known issues and areas for improvement:
 
