@@ -1053,7 +1053,7 @@ class ModelRunner:
             kwargs["input_embeds"] = forward_batch.input_embeds.bfloat16()
         if not self.is_generation:
             kwargs["get_embedding"] = True
-        logging.info(f"positions: {forward_batch.positions}")
+        logging.debug(f"positions: {forward_batch.positions}")
         return self.model.forward(
             forward_batch.input_ids,
             forward_batch.positions,

@@ -1529,9 +1529,9 @@ class ScheduleBatch(ScheduleBatchDisaggregationDecodeMixin):
         if len(fork_indices) > 5:
             # for debug
             if log:
-                logger.info(f"fork_indices: {fork_indices}")
+                logger.debug(f"fork_indices: {fork_indices}")
                 for i in fork_indices:
-                    logger.info(f"reqs[{i}]: {self.reqs[i]}")
+                    logger.debug(f"reqs[{i}]: {self.reqs[i]}")
         
         recover_indices = []
         
@@ -1561,7 +1561,7 @@ class ScheduleBatch(ScheduleBatchDisaggregationDecodeMixin):
                     tail = prefix_input[goal_idx:]
                 else:
                     if log:
-                        logger.info(f"prefix_input: {prefix_input}")
+                        logger.debug(f"prefix_input: {prefix_input}")
                     raise Exception("No <Goal> found")
                 def extract(s):
                     pattern = r"<Outline>\s*([0-9]+(?:\.[0-9]+)*)\s*:"
@@ -1570,9 +1570,9 @@ class ScheduleBatch(ScheduleBatchDisaggregationDecodeMixin):
                 path_number = len(path_ids)
                 if path_number > 20:
                     if log:
-                        logger.info(f"too many paths: reqs[{fork_indices[idx]}]: {dead_req}")
+                        logger.debug(f"too many paths: reqs[{fork_indices[idx]}]: {dead_req}")
                 if log:
-                    logger.info(f"path_number: {path_number}")
+                    logger.debug(f"path_number: {path_number}")
                 parent_start_path_idx_stack = dead_req.parent_start_path_idx_stack + [dead_req.start_path_idx]
                 for i, e in enumerate(path_ids):
                     rid = uuid.uuid4().hex
@@ -1614,10 +1614,10 @@ class ScheduleBatch(ScheduleBatchDisaggregationDecodeMixin):
         for i in path_indices:
             if self.forward_mode.is_extend():
                 if log:
-                    logger.info(f"before zombie_reqs: {self.zombie_reqs}")
+                    logger.debug(f"before zombie_reqs: {self.zombie_reqs}")
                 self.zombie_reqs.append(self.reqs[i])
                 if log:
-                    logger.info(f"after zombie_reqs: {self.zombie_reqs}")
+                    logger.debug(f"after zombie_reqs: {self.zombie_reqs}")
                 continue
             for key, value in self.p2c_map.items():
                 if self.reqs[i].rid in value:
@@ -1695,7 +1695,7 @@ class ScheduleBatch(ScheduleBatchDisaggregationDecodeMixin):
                     else:
                         self.p2c_map[key] = value
                 if log:
-                    logger.info(f"self.p2c_map: {self.p2c_map}")
+                    logger.debug(f"self.p2c_map: {self.p2c_map}")
                 self.zombie_reqs = self.zombie_reqs + other.zombie_reqs
                 return
             self.zombie_reqs = self.zombie_reqs + other.zombie_reqs
@@ -1728,7 +1728,7 @@ class ScheduleBatch(ScheduleBatchDisaggregationDecodeMixin):
                 else:
                     self.p2c_map[key] = value
             if log:
-                logger.info(f"self.p2c_map: {self.p2c_map}")
+                logger.debug(f"self.p2c_map: {self.p2c_map}")
             return
         
         for key, value in other.p2c_map.items():
@@ -1737,7 +1737,7 @@ class ScheduleBatch(ScheduleBatchDisaggregationDecodeMixin):
             else:
                 self.p2c_map[key] = value
         if log:
-            logger.info(f"self.p2c_map: {self.p2c_map}")
+            logger.debug(f"self.p2c_map: {self.p2c_map}")
         self.zombie_reqs = self.zombie_reqs + other.zombie_reqs
         if other.is_empty():
             return
@@ -1867,12 +1867,12 @@ class ScheduleBatch(ScheduleBatchDisaggregationDecodeMixin):
         l = list()
         for req in self.reqs:
             l.append(req.rid)
-        logger.info(f"active reqs: {l}")
+        logger.debug(f"active reqs: {l}")
         l = list()
         for req in self.zombie_reqs:
             l.append(req.rid)
-        logger.info(f"zombie reqs: {l}")
-        logger.info(f"p2c_map: {self.p2c_map}")
+        logger.debug(f"zombie reqs: {l}")
+        logger.debug(f"p2c_map: {self.p2c_map}")
         
 
     def __str__(self):

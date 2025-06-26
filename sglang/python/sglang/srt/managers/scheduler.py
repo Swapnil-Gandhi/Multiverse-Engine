@@ -1318,8 +1318,6 @@ class Scheduler(
             else:
                 if self.zombie_batch is not None:
                     self.running_batch = self.last_batch
-                    if self.attn_tp_rank == 0:
-                        logger.info(f"running_batch: {self.running_batch}")
 
         new_batch = self.get_new_batch_prefill()
         if new_batch is not None:
@@ -1332,8 +1330,6 @@ class Scheduler(
                 if self.running_batch.is_zombie and not self.running_batch.is_merge: # Split
                     if len(self.running_batch.pending_reqs) > 0:
                         for req in self.running_batch.pending_reqs:
-                            if self.attn_tp_rank == 0:
-                                logger.info(f"add req to queue: {req.rid}")
                             self._add_request_to_queue(req)
                         self.running_batch.pending_reqs = []
                         new_batch = self.get_new_batch_prefill()
@@ -1352,8 +1348,6 @@ class Scheduler(
                 elif self.running_batch.is_zombie and self.running_batch.is_merge: # Split and Merge
                     assert len(self.running_batch.pending_reqs) > 0
                     for req in self.running_batch.pending_reqs:
-                        if self.attn_tp_rank == 0:
-                            logger.info(f"add req to queue: {req.rid}")
                         self._add_request_to_queue(req)
                     self.running_batch.pending_reqs = []
                     zombie_group = self.running_batch.zombie_group
@@ -1408,7 +1402,7 @@ class Scheduler(
         final_last_node_list = []
         for group in zombie_group:
             if self.attn_tp_rank == 0:
-                logger.info(f"group parent: {group[0]}, group child: {[r.rid for r in group[1]]}")
+                logger.debug(f"group parent: {group[0]}, group child: {[r.rid for r in group[1]]}")
         for _, item in enumerate(zombie_group):
             parent_rid = item[0]
             reqs = item[1]
@@ -1440,8 +1434,6 @@ class Scheduler(
                     assert parent_start_path_idx_stack == req.parent_start_path_idx_stack, "parent_start_path_idx_stack should be the same"
             over_all_list = over_all_list + self.tokenizer.encode("<Conclusion>\n")
             max_right_most_pos = max(right_most_pos)
-            if self.attn_tp_rank == 0:
-                logger.info(f"max_right_most_pos: {max_right_most_pos}")
             parent_start_path_idx = parent_start_path_idx_stack[-1]
             parent_start_path_idx_stack = parent_start_path_idx_stack[:-1]
             new_req = Req(
@@ -1507,7 +1499,7 @@ class Scheduler(
         can_run_list: List[Req] = adder.can_run_list
         for req in can_run_list:
             if self.attn_tp_rank == 0:
-                logger.info(f"can_run_list: {req.rid}")
+                logger.debug(f"can_run_list: {req.rid}")
         self.waiting_queue = [
             x for x in self.waiting_queue if x not in set(can_run_list)
         ]
@@ -1537,7 +1529,7 @@ class Scheduler(
         final_last_node_list = []
         for group in zombie_group:
             if self.attn_tp_rank == 0:
-                logger.info(f"group parent: {group[0]}, group child: {[r.rid for r in group[1]]}")
+                logger.debug(f"group parent: {group[0]}, group child: {[r.rid for r in group[1]]}")
         for _, item in enumerate(zombie_group):
             parent_rid = item[0]
             reqs = item[1]
@@ -1557,11 +1549,10 @@ class Scheduler(
                     full_input_ids = prefix
                     indices, last_node = self.tree_cache.match_prefix(full_input_ids)
                     if self.attn_tp_rank == 0:
-                        logger.info(f"indices length: {len(indices)}, full_input_ids length: {len(full_input_ids)}")
                         if len(indices) != len(full_input_ids):
-                            logger.info(f"WARNING: indices != full_input_ids")
-                            logger.info(f"indices: {indices}, full_input_ids: {full_input_ids}")
-                            logger.info(f"len of indices: {len(indices)}, len of full_input_ids: {len(full_input_ids)}")
+                            logger.debug(f"WARNING: indices != full_input_ids")
+                            logger.debug(f"indices: {indices}, full_input_ids: {full_input_ids}")
+                            logger.debug(f"len of indices: {len(indices)}, len of full_input_ids: {len(full_input_ids)}")
                         # assert False, "indices != full_input_ids"
                     last_node_list.append(last_node)
                     over_all_indices = indices
@@ -1574,13 +1565,10 @@ class Scheduler(
                     over_all_list = over_all_list + full_input_ids[last_path_idx:]
                     indices, last_node = self.tree_cache.match_prefix(full_input_ids)
                     if self.attn_tp_rank == 0:
-                        logger.info(f"indices length: {len(indices)}, full_input_ids length: {len(full_input_ids)}")
-                        logger.info(f"last_path_idx: {last_path_idx}")
-                        logger.info(f"full_input_ids:{full_input_ids}")
                         if len(indices) != len(full_input_ids):
-                            logger.info(f"WARNING: indices != full_input_ids")
-                            logger.info(f"indices: {indices}, full_input_ids: {full_input_ids}")
-                            logger.info(f"len of indices: {len(indices)}, len of full_input_ids: {len(full_input_ids)}")
+                            logger.debug(f"WARNING: indices != full_input_ids")
+                            logger.debug(f"indices: {indices}, full_input_ids: {full_input_ids}")
+                            logger.debug(f"len of indices: {len(indices)}, len of full_input_ids: {len(full_input_ids)}")
                     last_node_list.append(last_node)
                     suffix_indices = indices[last_path_idx:]
                     over_all_indices = torch.cat([over_all_indices, suffix_indices])
@@ -1588,8 +1576,6 @@ class Scheduler(
                     assert parent_start_path_idx_stack == req.parent_start_path_idx_stack, "parent_start_path_idx_stack should be the same"
             over_all_list = over_all_list + self.tokenizer.encode("<Conclusion>\n")
             max_right_most_pos = max(right_most_pos)
-            if self.attn_tp_rank == 0:
-                logger.info(f"max_right_most_pos: {max_right_most_pos}")
             parent_start_path_idx = parent_start_path_idx_stack[-1]
             parent_start_path_idx_stack = parent_start_path_idx_stack[:-1]
             new_req = Req(
@@ -1639,7 +1625,7 @@ class Scheduler(
         can_run_list: List[Req] = adder.can_run_list
         for req in can_run_list:
             if self.attn_tp_rank == 0:
-                logger.info(f"can_run_list: {req.rid}")
+                logger.debug(f"can_run_list: {req.rid}")
         if len(can_run_list) > 0:
             if self.attn_tp_rank == 0:
                 self.log_prefill_stats(adder, can_run_list, 1)
