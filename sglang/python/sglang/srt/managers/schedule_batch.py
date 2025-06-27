@@ -1537,8 +1537,9 @@ class ScheduleBatch(ScheduleBatchDisaggregationDecodeMixin):
         
         for idx in range(len(fork_indices)):
             dead_req = self.reqs[fork_indices[idx]]
-            if dead_req.right_most_pos - dead_req.init_input_len >= dead_req.sampling_params.max_new_tokens - 30:
-                # We don't want to fork a request that is at the end of the sequence
+            if dead_req.right_most_pos - dead_req.init_input_len >= dead_req.sampling_params.max_new_tokens - 30 \
+                or len(dead_req.parent_start_path_idx_stack) > 5:
+                # We don't want to fork a request that is at the end of the sequence or outranged the max depth
                 recover_id = fork_indices[idx]
                 recover_indices.append(recover_id)
                 self.reqs[recover_id].finished_reason = None
