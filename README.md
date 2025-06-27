@@ -33,6 +33,8 @@ The script accepts the following arguments:
 To run the quick start example:
 
 ```bash
+cd example
+
 python example.py \
   --model_path Multiverse4FM/Multiverse-32B \
   --prompts_dir ./prompt

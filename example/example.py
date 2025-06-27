@@ -18,7 +18,7 @@ def main(args):
     )
 
     prompts = []
-    prompts_path = args.prompts_path
+    prompts_path = args.prompts_dir
     for p in os.listdir(prompts_path):
         with open(os.path.join(prompts_path, p), "r") as f:
             prompts.append(f.read())
