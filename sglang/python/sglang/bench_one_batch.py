@@ -420,13 +420,16 @@ def latency_test_run_once(
 
     # Record decode timing from 2nd output
     if output_len > 1:
-        med_decode_latency = np.median(decode_latencies)
-        med_decode_throughput = batch_size / med_decode_latency
+        p50, p90, p99 = np.percentile(decode_latencies, [50, 90, 99])
+        med_decode_throughput = batch_size / p50
         rank_print(
-            f"Decode.  median latency: {med_decode_latency:6.5f} s, median throughput: {med_decode_throughput:9.2f} token/s"
+            f"Decode.  p50: {p50:6.5f} s, p90: {p90:6.5f} s, p99: {p99:6.5f} s, median throughput: {med_decode_throughput:9.2f} token/s"
         )
-        measurement_results["median_decode_latency"] = med_decode_latency
+        measurement_results["median_decode_latency"] = p50
         measurement_results["median_decode_throughput"] = med_decode_throughput
+        measurement_results["p50"] = p50
+        measurement_results["p90"] = p90
+        measurement_results["p99"] = p99
 
     throughput = (input_len + output_len) * batch_size / tot_latency
     rank_print(
@@ -498,6 +501,19 @@ def latency_test(
         )
         if ret is not None:
             result_list.append(ret)
+
+    # Print CSV summary on rank 0
+    if tp_rank == 0:
+        print("\nBatch-Size,P50,P90,P99")
+        for r in result_list:
+            # Only print if we have decode percentiles (i.e., output_len > 1)
+            if "p50" in r:
+                print(
+                    f'{r["batch_size"]},'
+                    f'{r["p50"]},'
+                    f'{r["p90"]},'
+                    f'{r["p99"]}'
+                )
 
     # Write results in jsonlines format on rank 0.
     if tp_rank == 0 and bench_args.result_filename:
