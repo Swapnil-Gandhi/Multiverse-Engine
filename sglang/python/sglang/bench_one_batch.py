@@ -421,10 +421,10 @@ def latency_test_run_once(
     # Record decode timing from 2nd output
     if output_len > 1:
         p50, p90, p95, p99 = np.percentile(decode_latencies, [50, 90, 95, 99])
-        min_l  = np.min(decode_arr)
-        max_l  = np.max(decode_arr)
-        mean_l = np.mean(decode_arr)
-        std_l  = np.std(decode_arr)
+        min_l  = np.min(decode_latencies)
+        max_l  = np.max(decode_latencies)
+        mean_l = np.mean(decode_latencies)
+        std_l  = np.std(decode_latencies)
         med_decode_throughput = batch_size / p50
         rank_print(
             f"Decode.  p50: {p50:6.5f} s, p90: {p90:6.5f} s, p99: {p99:6.5f} s, median throughput: {med_decode_throughput:9.2f} token/s"
