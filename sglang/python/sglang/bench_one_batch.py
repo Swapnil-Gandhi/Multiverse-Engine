@@ -446,6 +446,15 @@ def latency_test_run_once(
     )
     measurement_results["total_latency"] = tot_latency
     measurement_results["overall_throughput"] = throughput
+
+    # Dump per-step decode latencies
+    if output_len > 1:
+        fname = f"{run_name}_{batch_size}_{input_len}_{output_len}.txt"
+        with open(fname, "w") as f:
+            for i, lat in enumerate(decode_latencies):
+                # one latency per line (seconds)
+                f.write(f"{i},{lat:.9f}\n")
+    
     return measurement_results
 
 
