@@ -522,10 +522,10 @@ def latency_test(
                     f'{float(r["p50"]):6.5f},'
                     f'{float(r["p90"]):6.5f},'
                     f'{float(r["p95"]):6.5f},'
-                    f'{float(r["p99"]):6.5f}'
-                    f'{float(r["min"]):6.5f}'
-                    f'{float(r["max"]):6.5f}'
-                    f'{float(r["mean"]):6.5f}'
+                    f'{float(r["p99"]):6.5f},'
+                    f'{float(r["min"]):6.5f},'
+                    f'{float(r["max"]):6.5f},'
+                    f'{float(r["mean"]):6.5f},'
                     f'{float(r["std"]):6.5f}'
                 )
 
