@@ -420,7 +420,11 @@ def latency_test_run_once(
 
     # Record decode timing from 2nd output
     if output_len > 1:
-        p50, p90, p99 = np.percentile(decode_latencies, [50, 90, 99])
+        p50, p90, p95, p99 = np.percentile(decode_latencies, [50, 90, 95, 99])
+        min_l  = np.min(decode_arr)
+        max_l  = np.max(decode_arr)
+        mean_l = np.mean(decode_arr)
+        std_l  = np.std(decode_arr)
         med_decode_throughput = batch_size / p50
         rank_print(
             f"Decode.  p50: {p50:6.5f} s, p90: {p90:6.5f} s, p99: {p99:6.5f} s, median throughput: {med_decode_throughput:9.2f} token/s"
@@ -429,7 +433,12 @@ def latency_test_run_once(
         measurement_results["median_decode_throughput"] = med_decode_throughput
         measurement_results["p50"] = p50
         measurement_results["p90"] = p90
+        measurement_results["p95"] = p95
         measurement_results["p99"] = p99
+        measurement_results["min"] = min_l
+        measurement_results["max"] = max_l
+        measurement_results["std"] = std_l
+        measurement_results["mean"] = mean_l
 
     throughput = (input_len + output_len) * batch_size / tot_latency
     rank_print(
@@ -504,15 +513,20 @@ def latency_test(
 
     # Print CSV summary on rank 0
     if tp_rank == 0:
-        print("\nBatch-Size,P50,P90,P99")
+        print("\nBatch-Size,P50,P90,P95,P99,MIN,MAX,MEAN,STD")
         for r in result_list:
             # Only print if we have decode percentiles (i.e., output_len > 1)
             if "p50" in r:
                 print(
                     f'{r["batch_size"]},'
-                    f'{r["p50"]},'
-                    f'{r["p90"]},'
-                    f'{r["p99"]}'
+                    f'{float(r["p50"]):6.5f},'
+                    f'{float(r["p90"]):6.5f},'
+                    f'{float(r["p95"]):6.5f},'
+                    f'{float(r["p99"]):6.5f}'
+                    f'{float(r["min"]):6.5f}'
+                    f'{float(r["max"]):6.5f}'
+                    f'{float(r["mean"]):6.5f}'
+                    f'{float(r["std"]):6.5f}'
                 )
 
     # Write results in jsonlines format on rank 0.
